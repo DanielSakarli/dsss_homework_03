@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 import json
-
+import matplotlib.pyplot as plt
 
 def load_data():
     # Specify the directory where the files are located
@@ -18,7 +18,7 @@ def load_data():
         meta_path = os.path.join(directory, f"{i}.meta")
         # Load the image
         try:
-            image = Image.open(image_path)
+            image = Image.open(image_path).convert("L")  # Convert RGB images to single-channel grayscale images
             images.append(image)
         except FileNotFoundError:
             print(f"Image file {image_path} not found.")
@@ -43,7 +43,29 @@ def load_data():
     print("Loaded metadata:", len(metadata))
     if metadata:
         print("Metadata of first file:", metadata[0])
+    print(f"Shape of image 0: {images[0].size}")
+    print(f"Mode of the image 0: {images[0].mode}")
+    print(f"Shape of mask 0: {masks[0].size}")
+    print(f"Mode of the mask 0: {masks[0].mode}")
+    # Plot the images
+    plot_images(images, masks, metadata)
 
+def plot_images(images, masks, metadata):
+    # Extract the titles from the metadata
+    titles = [meta.get("Subject disorder status") for meta in metadata]  # Extract the title from the metadata, or use a default value
+    # Plot the images with segmentation masks overlaid
+    fig, axes = plt.subplots(1, 4, figsize=(20, 5))  # Create a 1x4 subplot grid
+    for idx, ax in enumerate(axes):
+        if idx < len(images) and idx < len(masks):
+            # Blend the image and mask
+            blended = Image.blend(images[idx], masks[idx], alpha=0.5)  # 50% transparency
+            ax.imshow(blended)  # Display the blended image
+            ax.set_title(titles[idx])  # Set the title from the metadata
+        else:
+            ax.axis("off")  # Hide empty subplots
+
+    plt.tight_layout()
+    plt.show()
 
 if __name__ == "__main__":
     load_data()
