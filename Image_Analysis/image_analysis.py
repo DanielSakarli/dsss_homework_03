@@ -6,7 +6,7 @@ import numpy as np
 
 def load_BAGLS_data():
     # Specify the directory where the files are located
-    directory = "C://Users//DANIE//OneDrive//FAU//5. Semester//Data Science Survival Skills//Homework//Homework 03//Mini_BAGLS_dataset"
+    directory = "C://Users//DANIE//OneDrive//FAU//5. Semester//Data Science Survival Skills//Homework//Homework 03//Src//Mini_BAGLS_dataset"
     # Initialize data structures to hold loaded data
     images = []
     masks = []
@@ -38,25 +38,17 @@ def load_BAGLS_data():
             print(f"Metadata file {meta_path} not found.")
         except json.JSONDecodeError:
             print(f"Error decoding JSON for file {meta_path}.")
-    # Output the loaded data to check if everything is loaded correctly
-    print("Loaded images:", len(images))
-    print("Loaded masks:", len(masks))
-    print("Loaded metadata:", len(metadata))
-    if metadata:
-        print("Metadata of first file:", metadata[0])
-    print(f"Shape of image 0: {images[0].size}")
-    print(f"Mode of the image 0: {images[0].mode}")
-    print(f"Shape of mask 0: {masks[0].size}")
-    print(f"Mode of the mask 0: {masks[0].mode}")
+
     # Plot the images
     plot_images(images, masks, metadata)
 
 def plot_images(images, masks, metadata):
     # Extract the titles from the metadata
-    titles = [meta.get("Subject disorder status") for meta in metadata]  # Extract the title from the metadata, or use a default value
+    titles = [meta.get("Subject disorder status") for meta in metadata]  
     # Plot the images with segmentation masks overlaid
     fig, axes = plt.subplots(1, 4, figsize=(20, 5))  # Create a 1x4 subplot grid
     for idx, ax in enumerate(axes):
+        # Check if we have an image and mask to display
         if idx < len(images) and idx < len(masks):
             # Blend the image and mask
             blended = Image.blend(images[idx], masks[idx], alpha=0.5)  # 50% transparency
@@ -70,7 +62,7 @@ def plot_images(images, masks, metadata):
 
 def load_leave_data():
     # Load the image (replace with the path to your .jpg file)
-    image_path = "C://Users//DANIE//OneDrive//FAU//5. Semester//Data Science Survival Skills//Homework//Homework 03//leaves.jpg"
+    image_path = "C://Users//DANIE//OneDrive//FAU//5. Semester//Data Science Survival Skills//Homework//Homework 03//Src//leaves.jpg"
     img = Image.open(image_path) # Load the leave image
 
     # Convert to NumPy array for pixel manipulation
