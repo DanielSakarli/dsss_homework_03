@@ -119,5 +119,5 @@ def load_leave_data():
     plt.show()
 
 if __name__ == "__main__":
-    #load_BAGLS_data()
+    load_BAGLS_data()
     load_leave_data()
