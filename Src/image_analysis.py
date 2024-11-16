@@ -2,8 +2,9 @@ import os
 from PIL import Image
 import json
 import matplotlib.pyplot as plt
+import numpy as np
 
-def load_data():
+def load_BAGLS_data():
     # Specify the directory where the files are located
     directory = "C://Users//DANIE//OneDrive//FAU//5. Semester//Data Science Survival Skills//Homework//Homework 03//Mini_BAGLS_dataset"
     # Initialize data structures to hold loaded data
@@ -67,5 +68,56 @@ def plot_images(images, masks, metadata):
     plt.tight_layout()
     plt.show()
 
+def load_leave_data():
+    # Load the image (replace with the path to your .jpg file)
+    image_path = "C://Users//DANIE//OneDrive//FAU//5. Semester//Data Science Survival Skills//Homework//Homework 03//leaves.jpg"
+    img = Image.open(image_path) # Load the leave image
+
+    # Convert to NumPy array for pixel manipulation
+    img_array = np.array(img)
+
+    # Extract R, G, B channels
+    R, G, B = img_array[:, :, 0], img_array[:, :, 1], img_array[:, :, 2]
+
+    # Lightness method
+    lightness = (np.maximum(R, np.maximum(G, B)) + np.minimum(R, np.minimum(G, B))) / 2
+
+    # Average method
+    average = (R + G + B) / 3
+
+    # Luminosity method
+    luminosity = 0.2989 * R + 0.5870 * G + 0.1140 * B
+
+    # Create images for each grayscale converted image
+    lightness_img = Image.fromarray(lightness.astype('uint8'))
+    average_img = Image.fromarray(average.astype('uint8'))
+    luminosity_img = Image.fromarray(luminosity.astype('uint8'))
+
+    # Plot the results
+    fig, axes = plt.subplots(1, 4, figsize=(20, 5))
+
+    # Set the overall title
+    fig.suptitle("Different Grayscale Conversion Methods", fontsize=16)
+
+    axes[0].imshow(img)
+    axes[0].set_title("Original Image")
+    axes[0].axis("off")
+
+    axes[1].imshow(lightness_img, cmap="gray")
+    axes[1].set_title("Lightness Method")
+    axes[1].axis("off")
+
+    axes[2].imshow(average_img, cmap="gray")
+    axes[2].set_title("Average Method")
+    axes[2].axis("off")
+
+    axes[3].imshow(luminosity_img, cmap="gray")
+    axes[3].set_title("Luminosity Method")
+    axes[3].axis("off")
+
+    plt.tight_layout()
+    plt.show()
+
 if __name__ == "__main__":
-    load_data()
+    #load_BAGLS_data()
+    load_leave_data()
